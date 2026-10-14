@@ -1,0 +1,3 @@
+# The starter probes (kampung/*.py) need NOTHING beyond Python 3.8+ standard library.
+# This file is only for participants who want to write their own register-WRITE scripts.
+pymodbus>=3.0

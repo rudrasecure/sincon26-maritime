@@ -1,0 +1,82 @@
+# Register cheat-sheet (partial)
+
+This is the **read side** of each controller — the registers that tell you what the
+ship is and what it's doing. It's deliberately partial. The **command** registers —
+the ones that *do* things — you discover yourself, because learning to find a control
+by its behaviour is the transferable skill at these stations. The starter scripts and
+your own reads give you everything you need to do that.
+
+Everything below is a **holding register** (Modbus function code `0x03` to read,
+`0x06`/`0x10` to write). Values are 16-bit. Some are signed (noted).
+
+---
+
+## Ballast controller — `10.71.30.10:5021`
+
+**Device nameplate** — FC `0x2B`/14 (device identification) + the asset block:
+
+| | |
+|---|---|
+| Identity (FC43) | advertises vendor, product code, product name and model — **read it** with the starter (or `nmap --script modbus-discover`); naming it is your first win |
+| Asset block | HR **200–225** — device class, serial, firmware, year, running hours, redundancy, then the rated plate (tanks, pumps, capacities) |
+
+**Live telemetry (reads):**
+
+| HR | Meaning |
+|---|---|
+| 0–7 | Tank levels, % — FPT, APT, DB1P, DB1S, DB2P, DB2S, WBTP, WBTS (in that order) |
+| 10, 11 | Ballast pump 1 / 2 running (0/1) |
+| 12 | **List (heel) angle**, 0.1° signed — port negative, starboard positive |
+| 13 | Trim angle, 0.1° signed — + by the bow |
+| 20–25 | Alarms (0/1): list>2°, list>5°, list>15°, tank high, pump 1 fault, pump 2 fault |
+
+**Commands:** there is a block of command registers higher in the map (think
+**500-ish**). The cheat-sheet stops here on purpose — find which register does what by
+writing one and watching the telemetry above react. The nameplate told you this
+gauging system carries an **independent safety channel**; keep that fact in your
+pocket for when something stops you.
+
+---
+
+## Engine (propulsion) controller — `10.71.20.10:5020`
+
+**Device nameplate** — FC `0x2B`/14 + asset block:
+
+| | |
+|---|---|
+| Identity (FC43) | advertises vendor, product name and model — **read it** with the starter; it tells you exactly what propulsion-control system this is |
+| Asset block | HR **200–221** — device class, serial, firmware, then the rated plate (MCR/NCR power & rpm, cylinders, bore, stroke, propeller) |
+
+**Live telemetry (reads):**
+
+| HR | Meaning |
+|---|---|
+| 0 | Main engine speed, rpm |
+| 1 | Shaft power, kW |
+| 2 | Fuel rack / index |
+| 3 | Exhaust temperature, °C |
+| 4 | Lube-oil pressure |
+| 6 | Cooling-water temperature, °C |
+| 7 | Main engine running (0/1) |
+| 8 | Engine load, % |
+| 20–27 | Alarms (0/1): overspeed, LO low-pressure trip, exhaust high, CW high, emergency-stopped, steering faults |
+
+**Commands:** again a command block higher in the map (around **500**). Find the one
+that sets engine speed by consequence — write it, watch HR 0 follow. And remember for
+Task B: you can make a *displayed* value read whatever you like, but the safety unit
+is a separate box reading its own sensor — fooling the screen is not fooling the trip.
+
+---
+
+### Reading registers without the starter script
+
+`mbtcp.py` (in `kampung/`) is a tiny read-only client you can import, or use any
+Modbus tool. Example with pymodbus:
+
+```python
+from pymodbus.client import ModbusTcpClient
+c = ModbusTcpClient("10.71.30.10", port=5021)
+c.connect()
+print(c.read_holding_registers(0, count=14).registers)   # ballast telemetry
+c.close()
+```
