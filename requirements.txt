@@ -1,3 +1,9 @@
-# The starter probes (kampung/*.py) need NOTHING beyond Python 3.8+ standard library.
-# This file is only for participants who want to write their own register-WRITE scripts.
-pymodbus>=3.0
+# The Kampung starter probes (kampung/*.py) use the pymodbus library.
+#
+# Install it BEFORE you join the Ship OT Bridge Wi-Fi: that network is air-gapped
+# (no internet), so you cannot pip install once you are on it.
+#
+#   pip install -r requirements.txt
+#
+# Tested against pymodbus 3.12 (what the range runs). Any recent 3.x works.
+pymodbus>=3.11,<4
