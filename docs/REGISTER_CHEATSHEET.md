@@ -48,10 +48,14 @@ plate (MCR/NCR power and rpm, cylinders, bore, stroke, propeller).
 | 2 | Fuel rack / index |
 | 3 | Exhaust temperature, degC |
 | 4 | Lube-oil pressure |
+| 5 | Lube-oil temperature, degC |
 | 6 | Cooling-water temperature, degC |
 | 7 | Main engine running (0/1) |
 | 8 | Engine load, % |
-| 20-27 | Alarms (0/1): overspeed, LO low-pressure trip, exhaust high, CW high, emergency-stopped, steering faults |
+| 10 | Rudder angle actual, 0.1 deg signed (+ stbd / - port) |
+| 11, 12 | Steering pump 1 / 2 running (0/1) |
+| 13 | Steering mode |
+| 20-27 | Alarms (0/1): overspeed, LO low-pressure trip, exhaust high, CW high, emergency-stopped, steering pump 1 / 2 fault, steering hyd-oil low |
 
 **Commands.** Again a command block higher in the map (around **500**). Find the one
 that sets engine speed by consequence: write it, watch HR 0 follow. And remember for
