@@ -4,21 +4,20 @@ Participant toolkit for RUDRA Secure's Maritime Hacking Kampung at **SINCON 2026
 
 You scanned a QR code at the Kampung and landed here. This repository is the small kit
 you use at two of the hands-on stations, **Ballast** and **Engine**, on RUDRA's
-maritime cyber range. It holds starter scripts that help you *get oriented* on a real
-shipboard controller, plus the worksheet for each station.
+maritime cyber range. It holds a live register viewer for each station to help you
+*get oriented* on a real shipboard controller, plus the worksheet for each station.
 
-> **These are starter scripts, not solutions.** They connect, fingerprint the
-> controller, and show you what it is and what the ship is doing right now, then point
-> you at where to begin. The exercise itself you do yourself. A mentor is at the
-> station to help.
+> **These are read-only viewers, not solutions.** They connect and show you the
+> controller's live registers — what the ship is doing right now, refreshed every
+> second — so you can get oriented. The exercise itself you do yourself. A mentor is
+> at the station to help.
 
 ## What's here
 
 ```
 kampung/
-  probe.py          shared client and rendering for the two probes (uses pymodbus)
-  ballast_probe.py  Ballast station starter: fingerprint + orient (read-only)
-  engine_probe.py   Engine  station starter: fingerprint + orient (read-only)
+  ballast_registers.py  Ballast station: live register viewer (read-only, refreshes each second)
+  engine_registers.py   Engine  station: live register viewer (read-only, refreshes each second)
 docs/
   CONNECT.md             join the Kampung Wi-Fi and find the controller
   REGISTER_CHEATSHEET.md a partial register map (the read side; you discover the rest)
@@ -35,13 +34,13 @@ requirements.txt    the one dependency, pymodbus (install before you join the Wi
    pip install -r requirements.txt
    ```
 2. Join the Kampung Wi-Fi and get your laptop on the OT network: **[docs/CONNECT.md](docs/CONNECT.md)**.
-3. Run the starter for the station you're at:
+3. Run the register viewer for the station you're at:
    ```bash
-   python3 kampung/ballast_probe.py 10.71.30.10      # Ballast station
-   python3 kampung/engine_probe.py  10.71.20.10      # Engine  station
+   python3 kampung/ballast_registers.py 10.71.30.10   # Ballast station
+   python3 kampung/engine_registers.py  10.71.20.10   # Engine  station
    ```
-   Python 3.8+ and pymodbus (step 1) are all you need.
-4. Read what it tells you, then open the worksheet for that station and go.
+   Python 3.8+ and pymodbus (step 1) are all you need. Ctrl+C to stop.
+4. Watch the live registers, then open the worksheet for that station and go.
 
 ## A word on realism
 

@@ -15,22 +15,19 @@ harder than the last.
 ## 1. Orient (demo)
 
 ```bash
-python3 kampung/engine_probe.py 10.71.20.10
+python3 kampung/engine_registers.py 10.71.20.10
 ```
 
-Read the **nameplate** (device identification, FC43); it names the vendor and the
-propulsion-control product, your first win. Read the **rated plate** (a ~27 MW,
-7-cylinder slow-speed main engine) and the **live telemetry** (rpm, load, exhaust,
-lube-oil pressure).
+Watch the **live telemetry** refresh each second: rpm (HR0), load (HR8), exhaust (HR3),
+lube-oil pressure (HR4). The rated plate (HR200+) is a ~27 MW, 7-cylinder slow-speed
+main engine.
 
 ## 2. Task A: find the lever and take it
 
-1. **Fingerprint.** Done: the starter already read the device-identification strings.
-2. **Classify.** Watch the registers while the engine runs. A value that changes on its
-   own is telemetry; a value that only moves when *someone writes it*, and the engine
-   then responds, is a command. (The starter's "what moves on its own" scan gets you
-   going; `--map` shows the territory.)
-3. **Confirm by consequence.** Write the register you think is the engine speed command,
+1. **Classify.** Watch the register viewer while the engine runs. A value that changes
+   on its own is telemetry; a value that only moves when *someone writes it*, and the
+   engine then responds, is a command.
+2. **Confirm by consequence.** Write the register you think is the engine speed command,
    the lever, and watch the rpm (HR 0) ramp to follow it. If the engine moved, you found
    it.
 

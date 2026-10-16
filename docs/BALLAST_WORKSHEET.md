@@ -18,25 +18,22 @@ and beating it, is the job.
 
 ## 1. Orient (demo)
 
-Run the starter and read everything it shows you:
+Run the register viewer and watch the live values (Ctrl+C to stop):
 
 ```bash
-python3 kampung/ballast_probe.py 10.71.30.10
+python3 kampung/ballast_registers.py 10.71.30.10
 ```
 
-- The **nameplate** (device identification, FC43) tells you exactly what box you are
-  talking to: vendor, product and model. Naming it is your first win. Note what kind of
-  instrument it says it is, because that is a clue in itself.
-- The **rated plate** lists the tanks and their capacities. Note which tanks are *huge*
-  and which are tiny, and which sit on the centreline versus outboard.
-- The **live telemetry** is the truth layer: tank levels and the current list angle.
-- The script also notes this gauging system declares an **independent safety channel**.
-  File that away.
+- The **live telemetry** is the truth layer: tank levels (HR0–7), pump status, and the
+  current list angle (HR12). Watch what changes on its own.
+- Note which tanks sit on the centreline versus outboard (the big outboard **wing**
+  tanks carry the heel), and that this gauging system carries an **independent safety
+  channel** separate from the tank gauges. File that away.
 
 ## 2. The puzzle (task)
 
-1. **First attempt.** Find the command registers (the starter points you at roughly
-   where; confirm by consequence). Command a fill on one side and a drain on the other.
+1. **First attempt.** Find the command registers (the register cheatsheet points you at
+   roughly where; confirm by consequence). Command a fill on one side and a drain on the other.
    She starts to heel, then stops at about **3 degrees**, valves forced shut. Something
    caught you. Work out what.
 2. **The decoy.** There is an obvious-looking protection, a tank *overfill* guard, but

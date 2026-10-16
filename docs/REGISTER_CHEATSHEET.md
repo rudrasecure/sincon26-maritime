@@ -3,7 +3,7 @@
 This is the **read side** of each controller: the registers that tell you what the
 ship is and what it is doing. It is deliberately partial. The **command** registers,
 the ones that *do* things, you discover yourself, because learning to find a control
-by its behaviour is the transferable skill at these stations. The starter scripts and
+by its behaviour is the transferable skill at these stations. The register viewers and
 your own reads give you everything you need to do that.
 
 Everything below is a **holding register** (Modbus function code `0x03` to read,
@@ -13,12 +13,8 @@ Everything below is a **holding register** (Modbus function code `0x03` to read,
 
 ## Ballast controller: `10.71.30.10:5021`
 
-**Device nameplate.** FC `0x2B`/14 (device identification) plus the asset block:
-
-| | |
-|---|---|
-| Identity (FC43) | advertises vendor, product code, product name and model. **Read it** with the starter (or `nmap --script modbus-discover`); naming it is your first win |
-| Asset block | HR **200-225**: device class, serial, firmware, year, running hours, redundancy, then the rated plate (tanks, pumps, capacities) |
+**Asset block (reads).** HR **200-225**: device class, serial, firmware, year, running
+hours, redundancy, then the rated plate (tanks, pumps, capacities).
 
 **Live telemetry (reads):**
 
@@ -32,20 +28,16 @@ Everything below is a **holding register** (Modbus function code `0x03` to read,
 
 **Commands.** There is a block of command registers higher in the map (think
 **500-ish**). The cheat-sheet stops here on purpose: find which register does what by
-writing one and watching the telemetry above react. The nameplate told you this
-gauging system carries an **independent safety channel**. Keep that fact in your pocket
-for when something stops you.
+writing one and watching the telemetry above react. This gauging system carries an
+**independent safety channel** separate from the tank gauges; keep that fact in your
+pocket for when something stops you.
 
 ---
 
 ## Engine (propulsion) controller: `10.71.20.10:5020`
 
-**Device nameplate.** FC `0x2B`/14 plus the asset block:
-
-| | |
-|---|---|
-| Identity (FC43) | advertises vendor, product name and model. **Read it** with the starter; it tells you exactly what propulsion-control system this is |
-| Asset block | HR **200-221**: device class, serial, firmware, then the rated plate (MCR/NCR power and rpm, cylinders, bore, stroke, propeller) |
+**Asset block (reads).** HR **200-221**: device class, serial, firmware, then the rated
+plate (MCR/NCR power and rpm, cylinders, bore, stroke, propeller).
 
 **Live telemetry (reads):**
 
@@ -68,9 +60,9 @@ a separate box reading its own sensor. Fooling the screen is not fooling the tri
 
 ---
 
-### Reading registers without the starter script
+### Reading registers without the viewer
 
-Use pymodbus directly (the same library the probes use), or any Modbus tool:
+Use pymodbus directly (the same library the viewers use), or any Modbus tool:
 
 ```python
 from pymodbus.client import ModbusTcpClient
